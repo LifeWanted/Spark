@@ -3,11 +3,12 @@
 <head>
     <script type="application/javascript" src="../build/spark.js"></script>
     <script type="application/javascript">
-        var person = Spark.Object.new({ name : 'Jeremy' });
+        var person  = Spark.Object.new({ name : 'Jeremy' });
+        var view    = null;
 
         $(function(){
             var template = 'h1 Hello #{person.name}';
-            var view = Spark.View.new( template, '#body', { person : person } );
+            view = Spark.View.new( template, '#body', { person : person } );
 
             setTimeout(function(){
                 person( 'name', 'Henry' );
