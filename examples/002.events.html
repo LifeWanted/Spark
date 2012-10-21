@@ -5,14 +5,14 @@
     <script type="application/javascript">
         var view    = null;
         var person  = Spark.Object.new({
-            name : 'Natalie',
+            name : 'Click me!',
             nameClicked : function(){
-                alert( 'You clicked the name!' );
+                alert( 'You clicked the span!' );
             }
         });
 
         $(function(){
-            var template = 'h1\n  span( #{click!bind.person.nameClicked} ) #{person.name}';
+            var template = 'h1: span( #{click!bind.person.nameClicked} ) #{person.name}';
             view = Spark.View.new( template, '#body', { person : person } );
         });
     </script>
