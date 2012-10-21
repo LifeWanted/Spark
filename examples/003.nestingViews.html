@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="application/javascript" src="../build/spark.js"></script>
+    <script type="application/javascript">
+        var mainTemplate =
+            'div !{alice.html}\n'   +
+            'div !{bob.html}\n'     +
+            'div !{counter.html}'   ;
+        var personTemplate =
+            'h1 #{person.name}\n'           + 
+            'div Updated: #{person.count}'   ;
+        var counterTemplate =
+            'h1 Template Builds:\n'             +
+            'div Alice: #{alice.buildCount}\n'   +
+            'div Bob: #{bob.buildCount}'         ;
+
+        var mainView    = null;
+        var bob         = Spark.Object.new({
+            name    : 'Bob',
+            count   : 0,
+            update  : function(){
+                var self = this;
+                self.increment( 'count' );
+                setTimeout(function(){
+                    self( 'update' )();
+                }, Math.random() * 7000 );
+            }
+        });
+        var bobView     = Spark.View.new( personTemplate, { person : bob } );
+        var alice       = Spark.Object.new({
+            name    : 'Alice',
+            count   : 0,
+            update  : function(){
+                var self = this;
+                self.increment( 'count' );
+                setTimeout(function(){
+                    self( 'update' )();
+                }, Math.random() * 10000 );
+            }
+        });
+        var aliceView   = Spark.View.new( personTemplate, { person : alice } );
+        var counterView = Spark.View.new( counterTemplate, { alice : aliceView, bob : bobView } );
+
+        $(function(){
+            mainView = Spark.View.new(
+                mainTemplate,
+                '#body',
+                { alice : aliceView, bob : bobView, counter : counterView }
+            );
+            alice( 'update' )();
+            bob( 'update' )();
+        });
+    </script>
+</head>
+<body>
+    <div id="body"></div>
+</body>
+</html>
