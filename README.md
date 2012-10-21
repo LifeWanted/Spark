@@ -91,3 +91,91 @@ and the subclass' prototype will be extended with `Spark.Object`'s prototype and
     var fred = Person.new( 'Fred', 42 );
     fred( 'age' ); // => 42
 ```
+
+Templates with Spark.View
+-------------------------
+
+Spark includes browser-side templating with [Jade](https://github.com/visionmedia/jade). These
+templates are managed with `Spark.View`. The `Spark.View.new` method takes 3 parameters: a template
+string, a jQuery selector, and an `Object` of local variables. The selector and locals are both
+optional. If a selector is provided the view will insert itself into the DOM using that selector.
+The locals `Object` will be passed to Jade for rendering the template.
+
+```js
+    var template    = 'h1 Hello World!';
+    var view        = Spark.View.new( template, 'body' );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <h1>Hello World!</h1>
+    //  </body>
+```
+
+Any variables in the Jade template will be observed and when they change the DOM will be updated
+automatically for you.
+
+```js
+    var person      = Spark.Object.new({ name : 'Fred' });
+    var template    = 'h1 Hello #{person.name}!';
+    var view        = Spark.View.new( template, 'body', { person : person } );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <h1>Hello Fred!</h1>
+    //  </body>
+
+    person( 'name', 'Natalie' );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <h1>Hello Natalie!</h1>
+    //  </body>
+```
+
+### Variable Flags
+
+Spark attaches special meaning to template variables using flags after the variable name. For
+example, to attach the `!ignore` flag to the variable `#{person.age}` simply put it after the
+variable's name like this `#{person.age!ignore}`. The flags that Spark supports are:
+
+ - !bind
+ - !ignore
+ - !remove
+
+#### !bind
+
+This flag should be used in a tag's attribute list after the name of an event. This will cause the
+`Spark.View` to bind to the named event. If you would like to specify name of a callback function
+just put its path in the locals `Object` after the flag. For example, the following would bind the
+click event on the span to the property `nameClicked` in the local variable `person`.
+
+```jade
+    h1 span( #{click!bind.person.nameClicked} ) #{person.name}
+```
+
+#### !ignore
+
+This flag will prevent the `Spark.View` object observing the property specified in the variable. If
+the property changes after the `Spark.View` builds the template, the DOM will not be updated.
+
+```js
+    var person      = Spark.Object.new({ name : 'Fred' });
+    var template    = 'h1 Hello #{person.name!ignore}!';
+    var view        = Spark.View.new( template, 'body', { person : person } );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <h1>Hello Fred!</h1>
+    //  </body>
+
+    person( 'name', 'Natalie' );
+
+    // The DOM body will still be:
+    //  <body>
+    //      <h1>Hello Fred!</h1>
+    //  </body>
+```
+
+#### !remove
+
+This flag will cause the whole variable to be removed from the template.
