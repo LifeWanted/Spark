@@ -145,9 +145,9 @@ variable's name like this `#{person.age!ignore}`. The flags that Spark supports 
 #### !bind
 
 This flag should be used in a tag's attribute list after the name of an event. This will cause the
-`Spark.View` to bind to the named event. If you would like to specify name of a callback function
-just put its path in the locals `Object` after the flag. For example, the following would bind the
-click event on the span to the property `nameClicked` in the local variable `person`.
+`Spark.View` to bind to the named event. If you would like to specify a callback function just put
+its path in the locals `Object` after the flag. For example, the following would bind the click
+event on the span to the property `nameClicked` in the local variable `person`.
 
 ```jade
     h1 span( #{click!bind.person.nameClicked} ) #{person.name}
@@ -178,4 +178,48 @@ the property changes after the `Spark.View` builds the template, the DOM will no
 
 #### !remove
 
-This flag will cause the whole variable to be removed from the template.
+This flag will cause the whole variable to be removed from the template. The following two templates
+are the same as far as Jade is concerned:
+
+```jade
+    h1 Hello, #{person.name!remove}!
+```
+
+```jade
+    h1 Hello, !
+```
+
+### Nesting Spark.Views
+
+You can nest `Spark.View`s within each other by simply passing the sub-view to the parent view as
+local variables and then reading the sub-view's `html` property in the template. Any changes that
+happen on the sub-view will propagate upwards and the parent view will update. For example, the
+following code nests the `personView` `Spark.View` within the `mainView` `Spark.View`.
+
+```js
+    var person          = Spark.Object.new({ name : 'Fred', age : 42 });
+    var personTemplate  = 'h1 Hi, my name is #{person.name}. I am #{person.age} years old.';
+    var personView      = Spark.View.new( personTemplate, person );
+
+    var mainTemplate    = 'div !{personView.html}';
+    var mainView        = Spark.View.new( mainTemplate, 'body', { personView : personView } );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <div>
+    //          <h1>Hello, my name is Fred. I am 42 years old.</h1>
+    //      </div>
+    //  </body>
+
+    person.increment( 'age' );
+
+    // The DOM body will now be:
+    //  <body>
+    //      <div>
+    //          <h1>Hello, my name is Fred. I am 43 years old.</h1>
+    //      </div>
+    //  </body>
+```
+
+Note that the jQuery selector parameter is left off for the sub-view. This is because it does not
+need to insert itself into the DOM, it will be inserted by the parent template.
