@@ -46,11 +46,11 @@ instead of a name-value pair to set multiple values at once.
 ```
 
 All properties on a `Spark.Object` can be observed for changes by passing a property name and
-callback to `Spark.Object.observe`. Observers will be called on the next tick of the browser's event
+callback to `Spark.Object.on`. Observers will be called on the next tick of the browser's event
 loop and will only be called once per call stack.
 
 ```js
-    fred.observe( 'age', function(){ alert( 'Happy Birthday!' ); } ); // => fred
+    fred.on( 'change.spark', 'age', function(){ alert( 'Happy Birthday!' ); } ); // => fred
 
     // This only causes the alert to happen once.
     fred.increment( 'age' )
@@ -61,6 +61,10 @@ loop and will only be called once per call stack.
         fred.increment( 'age' );
     }, 1000 * 60 * 60 * 24 * 365 ); // One year in milliseconds
 ```
+
+You can also observe the `Spark.Object` itself by not passing a property name to `Spark.Object.on`.
+This will result in the callback being called whenever any properties are added, removed, or changed
+on the `Spark.Object` instance.
 
 Properties can be removed by using the `Spark.Object.delete` method. If no property name is provided
 all properties are removed and the `Spark.Object` destroys itself.
