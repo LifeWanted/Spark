@@ -8,10 +8,10 @@ don't like long method names or don't want to follow a predefined naming convent
 Spark.Object
 ------------
 
-The basic building block of Spark is the Spark.Object class. It provides a simple interface for
-getting and setting observable properties as well as creating subclasses. New Spark.Object instances
-are created using the method `Spark.Object.new`. It takes as its parameter an optional `Object`
-containing the new `Spark.Object`'s default properties.
+The basic building block of Spark is the `Spark.Object` class. It provides a simple interface for
+getting and setting observable properties as well as creating subclasses. New `Spark.Object`
+instances are created using the method `Spark.Object.new`. It takes as its parameter an optional
+`Object` containing the new `Spark.Object`'s default properties.
 
 ```js
     var fred = Spark.Object.new( { name : 'Fred', age : 42 } );
@@ -50,7 +50,7 @@ callback to `Spark.Object.observe`. Observers will be called on the next tick of
 loop and will only be called once per call stack.
 
 ```js
-    fred.observe( 'age', function(){ alert( 'Happy Birthday!' ); } ) // => fred
+    fred.observe( 'age', function(){ alert( 'Happy Birthday!' ); } ); // => fred
 
     // This only causes the alert to happen once.
     fred.increment( 'age' )
@@ -88,6 +88,6 @@ and the subclass' prototype will be extended with `Spark.Object`'s prototype and
     }
     Spark.Object.extend( Person ); // => Person.prototype
 
-    var fred = Person.new( 'Fred', '42' );
+    var fred = Person.new( 'Fred', 42 );
     fred( 'age' ); // => 42
 ```
