@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="application/javascript" src="../build/spark.js"></script>
+    <script type="application/javascript">
+        var view = null;
+
+        $(function(){
+            var template = 'h1( #{click!bind} ) Click me!\nh2( #{click!bind} ) No, click me!';
+            view = Spark.View.new( template, '#body' );
+
+            $( view ).on( 'click.spark', function( event ){
+                alert( 'Clicked on ' + event.target.tagName );
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="body"></div>
+</body>
+</html>
