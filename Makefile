@@ -11,6 +11,8 @@ COMPILED_MIN=${BUILD}/spark.min.js
 
 LICENSE=license.txt
 
+all: spark.min.js
+
 spark.js: ${SPARK} ${JQUERY} ${JADE}
 	mkdir -p ${BUILD}
 	cp ${LICENSE} ${COMPILED}
