@@ -5,6 +5,8 @@ Spark is a JavaScript web application framework inspired by the great framework
 [EmberJS](https://github.com/emberjs/ember.js). Spark, however, is aimed at lazy programmers who
 don't like long method names or don't want to follow a predefined naming convention.
 
+Please see the [wiki](https://github.com/LifeWanted/Spark/wiki) for complete documentation.
+
 Spark.Object
 ------------
 
@@ -227,3 +229,7 @@ following code nests the `personView` `Spark.View` within the `mainView` `Spark.
 
 Note that the jQuery selector parameter is left off for the sub-view. This is because it does not
 need to insert itself into the DOM, it will be inserted by the parent template.
+
+----------
+
+For more documentation please visit the [wiki](https://github.com/LifeWanted/Spark/wiki).
